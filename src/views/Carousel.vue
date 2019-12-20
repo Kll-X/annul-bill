@@ -1,6 +1,7 @@
 <template>
     <div>
-        <swiper id="carousel" :options="swiperOption" ref="mySwiper" @slideChange="slideChange" @someSwiperEvent="callback">
+        <swiper id="carousel" :options="swiperOption" ref="mySwiper" @slideChangeTransitionEnd="slideChangeTransitionEnd"
+                @someSwiperEvent="callback">
             <!-- slides -->
             <swiper-slide class="carousel">
                 <img class="page_bg" :src="pages[0]" alt="">
@@ -97,7 +98,7 @@
             </swiper-slide>
             <swiper-slide class="carousel">
                 <img class="page_bg" :src="pages[4]" alt="">
-                <span class="honor_title">{{honor_title}}</span>
+                <span class="honor_title_1">{{honor_title}}</span>
             </swiper-slide>
             <swiper-slide class="carousel">
                 <img class="page_bg" :src="pages[5]" alt="">
@@ -107,6 +108,14 @@
             </swiper-slide>
             <swiper-slide class="carousel">
                 <img class="page_bg" :src="pages[7]" alt="">
+            </swiper-slide>
+            <swiper-slide class="carousel">
+                <div id="last_page_wrapper" ref="last_page_wrapper">
+                    <img class="page_bg" :src="pages[8]" alt="">
+                    <span class="honor_title_2">{{honor_title}}</span>
+                    <span class="slogan">{{slogan}}</span>
+                </div>
+                <img alt="" class="last_page" ref="last_image">
             </swiper-slide>
         </swiper>
     </div>
@@ -118,6 +127,7 @@
     import {swiper, swiperSlide} from 'vue-awesome-swiper'
     import {getphoneDone} from '../../public/lib/js/globalFunc'
     import wordcloud from 'vue-wordcloud'
+    import html2canvas from 'html2canvas';
 
     getphoneDone();
     export default {
@@ -129,8 +139,9 @@
         },
         data() {
             return {
-                favor_item:'影音娱乐',
-                honor_title:'一代宗师',
+                dataURL:'',
+                favor_item: '影音娱乐',
+                honor_title: '一代宗师',
                 pages: [
                     require('../../public/img/1.png'),
                     require('../../public/img/2.png'),
@@ -139,7 +150,8 @@
                     require('../../public/img/5.png'),
                     require('../../public/img/6.png'),
                     require('../../public/img/7.png'),
-                    require('../../public/img/8.png')
+                    require('../../public/img/8.png'),
+                    require('../../public/img/9.png')
                 ],
                 swiperOption: {
                     direction: 'vertical',
@@ -150,15 +162,31 @@
                     {name: '运动健康'}, {name: '儿童应用'}, {name: '美化壁纸'}, {name: '儿童游戏'}, {name: '休闲益智'}, {name: '动作冒险'},
                     {name: '经营养成'}, {name: '体育赛车'}, {name: '角色扮演'}, {name: '文字游戏'}, {name: '疯狂跑酷'}, {name: '其他游戏'},
                     {name: '消除游戏'}, {name: '棋牌游戏'}, {name: '飞行射击'}, {name: '策略塔防'}, {name: '网络游戏'}, {name: '射击游戏'}
-                ]
+                ],
+
             }
         },
         computed: {
             swiper() {
                 return this.$refs.mySwiper.swiper
             },
-            defaultWords(){
+            defaultWords() {
                 return this.getRandomArr(this.keyword_arr)
+            },
+            slogan() {
+                let slogans = [
+                    '流行应用千万条，安全下载第一条！',
+                    '皮皮虾，我们走，去下游戏，横着走！',
+                    '大吉大利，今晚吃“机”！',
+                    '热门应用，速来盘TA！',
+                    '生活就要断舍离，可…放下手机，我太难了！',
+                    '好嗨呦，绿色下载直达巅峰！',
+                    '拒绝996，健康生活绿色下载！',
+                    '绿色下载，雨女无瓜？快来MM，畅享安全！',
+                    '用MM下应用，柠檬精都不酸啦！',
+                    '硬核下载，不得不爱！'
+                ];
+                return slogans[parseInt(Math.random()*slogans.length)]
             }
         },
         mounted() {
@@ -168,9 +196,25 @@
             console.log('this is current swiper instance object', this.swiper);
         },
         methods: {
-            slideChange(){
-              //  监听页面切换，发出响应请求
-              console.log(this.swiper.activeIndex) ;
+            toImage(){
+
+                this.$nextTick((x) => {   //正确写法
+                    html2canvas($('#last_page_wrapper')[0],{
+                        backgroundColor: null
+                    }).then((canvas)=> {
+                        let dataURL = canvas.toDataURL("image/png");
+                        this.dataURL = dataURL;
+                        this.$refs.last_image.src = this.dataURL;
+                        console.log('转图完成');
+                    });
+                })
+            },
+            slideChangeTransitionEnd() {
+                //  监听页面切换，发出响应请求
+                console.log(this.swiper.activeIndex);
+                if(this.swiper.activeIndex == 8){
+                    this.toImage();
+                }
             },
             callback() {
                 console.log(1)
@@ -199,12 +243,12 @@
     }
 
     #carousel {
-        /*position: relative;*/
+        position: relative;
         width: 100vw;
         height: 100vh;
 
         .carousel {
-            position: relative;
+            /*position: relative;*/
 
             .page_bg {
                 display: block;
@@ -264,43 +308,49 @@
                     .bill_data1 {
                         font-size: 0.58rem;
                         font-weight: bold;
-                        color: yellow;
+                        color: #fae200;
                     }
 
                     .bill_data2 {
                         font-size: 0.38rem;
                         font-weight: bold;
-                        color: yellow;
+                        color: #fbf800;
                     }
 
                     .bill_data3 {
                         font-size: 0.5rem;
                         font-weight: bold;
-                        color: yellow;
+                        color: #fae200;
                     }
 
                     .bill_data4 {
                         font-size: 0.38rem;
                         font-weight: bold;
-                        color: yellow;
+                        color: #fae000;
                     }
 
                     .bill_data5 {
                         font-size: 0.38rem;
                         font-weight: bold;
-                        color: yellow;
+                        color: #fae000;
                     }
 
                     .bill_data6_1 {
                         font-size: 0.58rem;
                         font-weight: bold;
-                        color: yellow;
+                        color: #fae300;
+                    }
+
+                    .bill_data6_2 {
+                        font-size: 0.38rem;
+                        font-weight: bold;
+                        color: #fae000;
                     }
 
                     .bill_data7 {
                         font-size: 0.62rem;
                         font-weight: bold;
-                        color: yellow;
+                        color: #fae000;
                     }
                 }
 
@@ -351,9 +401,10 @@
                 transform: translateX(-50%);
                 background: #ffffff;
             }
-            .favor_item{
+
+            .favor_item {
                 position: absolute;
-                top:16.71rem;
+                top: 16.71rem;
                 left: 50%;
                 -webkit-transform: translateX(-50%);
                 -moz-transform: translateX(-50%);
@@ -364,9 +415,10 @@
                 font-weight: bold;
                 color: #fcfdfe;
             }
-            .honor_title{
+
+            .honor_title_1 {
                 position: absolute;
-                top:7rem;
+                top: 7rem;
                 left: 50%;
                 -webkit-transform: translateX(-50%);
                 -moz-transform: translateX(-50%);
@@ -377,12 +429,44 @@
                 font-weight: bold;
                 color: #edd749;
             }
+
+            .honor_title_2 {
+                position: absolute;
+                top: 4.47rem;
+                left: 1.32rem;
+                font-size: 0.75rem;
+                font-weight: bold;
+                color: #1353ba;
+            }
+
+            .slogan {
+                position: absolute;
+                top: 6.37rem;
+                left: 1.15rem;
+                font-size: 0.56rem;
+                font-weight: bold;
+                color: #1353ba;
+                display: inline-block;
+                width: 8.48rem;
+                word-wrap: break-word;
+            }
+        }
+
+        .last_page{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            opacity: 0;
         }
 
     }
 
     /*插件bug*/
-    div.tooltip{
+    div.tooltip {
         display: none;
     }
 </style>
