@@ -1,16 +1,21 @@
-const MOCKURL = 'http://www.weichuang.com/'; // mock模拟
-const SERVERURL = 'http://localhost:8080/';//真实URL
+if (location.host.search('hf.mmarket') > -1) {
+    var test = 1;
+    var pre_url = 'http://hf.mmarket.com/'
+} else if (location.host.search('www.hfshop') > -1) {
+    var test = 0;
+    var pre_url = 'http://www.hfshop.com/'
+} else {
+    var test = 0;
+    var pre_url = 'http://47.107.125.18/hfshop/'
+}
+;
 
 const URL = {
-    getVarietyItem: MOCKURL + 'getVarietyItem',
-    getHotProduct: MOCKURL + 'getHotProduct',
-    registUser: SERVERURL + 'user/registUser',
-    loginUser: SERVERURL + 'user/loginUser',
-    getTypes: SERVERURL + 'type/getTypes',
-    getProductsByType: SERVERURL + 'product/getProductsByType',
-    getDetail: SERVERURL + 'product/getDetail',
-    addCart: SERVERURL + 'cart/addCart',
-    getCart: SERVERURL + 'cart/getCart'
+    test:test,
+    getVerifyCode:pre_url+'app/index.php?i=2&c=entry&m=ewei_shopv2&do=mobile&r=account.getVerifyCode',   //获取图像验证码
+    sendCode:pre_url+'app/index.php?i=2&c=entry&m=ewei_shopv2&do=mobile&r=account.sendcode',
+    accountVerifyCode:pre_url+'app/index.php?i=2&c=entry&m=ewei_shopv2&do=mobile&r=account.VerifyCode_MM',  //短信码校验
+    accountLogin:pre_url+'app/index.php?i=2&c=entry&m=ewei_shopv2&do=mobile&r=account.login'  //登录
 };
 
 export default URL;

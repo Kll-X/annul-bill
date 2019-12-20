@@ -3,11 +3,17 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+//响应样式
+import '@/assets/js/rem.js'
+
+//使用vant框架
+import 'vant/lib/index.css';
+import { Button,Toast  } from 'vant';
+
+
 Vue.config.productionTip = false
 
-//初始化样式
-import '@/assets/css/reset.css'
-import '@/assets/js/rem.js'
+Vue.use(Button).use(Toast);
 
 new Vue({
   router,
