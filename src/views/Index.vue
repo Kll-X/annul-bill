@@ -29,6 +29,7 @@
         position: relative;
 
         .index_bg {
+            display: block;
             width: 100%
         }
 

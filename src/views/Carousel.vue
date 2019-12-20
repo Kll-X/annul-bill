@@ -110,7 +110,7 @@
                 <img class="page_bg" :src="pages[7]" alt="">
             </swiper-slide>
             <swiper-slide class="carousel">
-                <div id="last_page_wrapper" ref="last_page_wrapper">
+                <div id="img_content" ref="img_content">
                     <img class="page_bg" :src="pages[8]" alt="">
                     <span class="honor_title_2">{{honor_title}}</span>
                     <span class="slogan">{{slogan}}</span>
@@ -199,7 +199,7 @@
             toImage(){
 
                 this.$nextTick((x) => {   //正确写法
-                    html2canvas($('#last_page_wrapper')[0],{
+                    html2canvas($('#img_content')[0],{
                         backgroundColor: null
                     }).then((canvas)=> {
                         let dataURL = canvas.toDataURL("image/png");
@@ -458,9 +458,11 @@
             left: 0;
             right: 0;
             bottom: 0;
+            display: block;
             width: 100vw;
             height: 100vh;
             opacity: 0;
+            z-index: 1
         }
 
     }

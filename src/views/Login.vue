@@ -236,6 +236,7 @@
         position: relative;
 
         .login_bg {
+            display: block;
             width: 100%
         }
 
