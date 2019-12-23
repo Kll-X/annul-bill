@@ -119,6 +119,7 @@
                 <img alt="" class="last_page" ref="last_image">
             </swiper-slide>
         </swiper>
+        <img v-show="!last_page" :src="require('../../public/img/guide.gif')" alt="" class="guide">
     </div>
 
 </template>
@@ -140,6 +141,7 @@
         },
         data() {
             return {
+                last_page: 0,
                 dataURL: '',
                 favor_item: '影音娱乐',
                 honor_title: '一代宗师',
@@ -195,7 +197,7 @@
         },
         created() {
             //判断是否已有用户登录后的信息，否则跳转回首页
-            if(this.userinfo.login){
+            if (this.userinfo.login) {
                 //  请求账单信息
                 this.axios({
                     url: URL.getVerifyCode,
@@ -207,7 +209,7 @@
                     .catch(err => {
 
                     });
-            }else{
+            } else {
                 this.$router.push({name: 'index'})
             }
         },
@@ -239,7 +241,11 @@
                 // console.log(this.swiper.activeIndex);
                 if (this.swiper.activeIndex == 8) {
                     this.toImage();
+                    this.last_page = 1
+                } else {
+                    this.last_page = 0
                 }
+                console.log(this.last_page)
             },
             callback() {
                 console.log(1)
@@ -490,6 +496,15 @@
             z-index: 1
         }
 
+    }
+
+    .guide {
+        position: fixed;
+        bottom: 0.2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        width: 1rem;
     }
 
     /*插件bug*/
