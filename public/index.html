@@ -1,22 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>annual-bill</title>
-  </head>
-  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-  <body>
-    <noscript>
-      <strong>We're sorry but annual-bill doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
+</head>
+<!--<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>-->
+<script src="<%= BASE_URL %>lib/js/jq.js"></script>
+<body>
+<noscript>
+    <strong>We're sorry but annual-bill doesn't work properly without JavaScript enabled. Please enable it to
+        continue.</strong>
+</noscript>
 
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+<div id="app"></div>
+<!-- built files will be auto injected -->
+</body>
 
-  <script src="lib/js/jsencrypt.min.js"></script>
-  <script src="lib/js/tools.js"></script>
+<!--<script src="<%= BASE_URL %>lib/js/jsencrypt.min.js"></script>-->
+<!--<script src="<%= BASE_URL %>lib/js/tools.js"></script>-->
+<script>
+    function getphoneDone(pn, mask) {
+        $.ajax({
+            url:"http://www.duans.top/freeApi/api.php?act=newslist",    //请求的url地址
+            dataType:"json",   //返回格式为json
+            async:true,//请求是否异步，默认为异步，这也是ajax重要特性
+            // data:{},    //参数值
+            type:"get",   //请求方式
+            beforeSend:function(){
+                //请求前的处理
+            },
+            success:function(req){
+                //请求成功时处理
+                console.log(req)
+            },
+            complete:function(){
+                //请求完成的处理
+            },
+            error:function(){
+                //请求出错处理
+            }
+        });
+    }
+    getphoneDone(1, 2)
+</script>
 </html>

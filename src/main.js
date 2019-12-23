@@ -10,6 +10,11 @@ import '@/assets/js/rem.js'
 import 'vant/lib/index.css';
 import { Button,Toast  } from 'vant';
 
+//使用vant框架
+import axios from 'axios'
+Vue.prototype.axios = axios;
+
+
 
 Vue.config.productionTip = false
 

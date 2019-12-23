@@ -125,11 +125,10 @@
 <script>
     import 'swiper/dist/css/swiper.css'
     import {swiper, swiperSlide} from 'vue-awesome-swiper'
-    import {getphoneDone} from '../../public/lib/js/globalFunc'
     import wordcloud from 'vue-wordcloud'
     import html2canvas from 'html2canvas';
+    import URL from '@/service.config.js'
 
-    getphoneDone();
     export default {
         name: 'carrousel',
         components: {
@@ -188,6 +187,9 @@
                 ];
                 return slogans[parseInt(Math.random()*slogans.length)]
             }
+        },
+        created(){
+            getphoneDone();
         },
         mounted() {
             let self = this;
