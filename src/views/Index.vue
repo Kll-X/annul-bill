@@ -1,20 +1,32 @@
 <template>
     <div id="index">
-        <img class="index_bg" ondragstart="return false" src="../../public/img/index_bg.png" alt="">
-        <span class="next_btn" @click.stop="next_btn()"></span>
+<!--        <iframe class="login_iframe" src="http://h5.mmarket.com/pps_webh5/getphone1/dist/index.html?type=2&yxbTest=true" frameborder="0"></iframe>-->
     </div>
 </template>
 
 <script>
+    import {mapMutations} from 'vuex'
     export default {
         name: "index",
         data() {
             return {}
         },
+        created() {
+            console.log(1);
+            window.getphoneDone = this.getphoneDone;
+        },
         methods: {
-            next_btn() {
-                console.log('index');
-                this.$router.push({name: 'login'})
+            ...mapMutations([
+                'UPDATE_USERINFO'
+            ]),
+            getphoneDone(a, b) {
+                if (a && b) {
+                    this.UPDATE_USERINFO({pn: a, mask: b,login:true});
+                    //跳转至账单页面
+                    this.$router.push({name: 'carousel'})
+                } else {
+                    console.log('getphoneDone else')
+                }
             }
         }
     }
@@ -28,22 +40,16 @@
     #index {
         position: relative;
 
+
+        .login_iframe{
+            width: 100vw;
+            height: 100vh;
+        }
+
+
         .index_bg {
             display: block;
             width: 100%
-        }
-
-        .next_btn {
-            background: rgba(0, 0, 0, 0);
-            position: absolute;
-            bottom: 2.13rem;
-            width: 3.84rem;
-            height: 1rem;
-            left: 50%;
-            border-radius: 5px;
-            -webkit-transform: translateX(-50%);
-            -moz-transform: translateX(-50%);
-            transform: translateX(-50%);
         }
     }
 </style>

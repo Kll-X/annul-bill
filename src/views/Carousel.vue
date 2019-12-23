@@ -1,6 +1,7 @@
 <template>
     <div>
-        <swiper id="carousel" :options="swiperOption" ref="mySwiper" @slideChangeTransitionEnd="slideChangeTransitionEnd"
+        <swiper id="carousel" :options="swiperOption" ref="mySwiper"
+                @slideChangeTransitionEnd="slideChangeTransitionEnd"
                 @someSwiperEvent="callback">
             <!-- slides -->
             <swiper-slide class="carousel">
@@ -128,6 +129,7 @@
     import wordcloud from 'vue-wordcloud'
     import html2canvas from 'html2canvas';
     import URL from '@/service.config.js'
+    import {mapState, mapMutations} from 'vuex'
 
     export default {
         name: 'carrousel',
@@ -138,7 +140,7 @@
         },
         data() {
             return {
-                dataURL:'',
+                dataURL: '',
                 favor_item: '影音娱乐',
                 honor_title: '一代宗师',
                 pages: [
@@ -166,6 +168,9 @@
             }
         },
         computed: {
+            ...mapState([
+                'userinfo'
+            ]),
             swiper() {
                 return this.$refs.mySwiper.swiper
             },
@@ -185,25 +190,43 @@
                     '用MM下应用，柠檬精都不酸啦！',
                     '硬核下载，不得不爱！'
                 ];
-                return slogans[parseInt(Math.random()*slogans.length)]
+                return slogans[parseInt(Math.random() * slogans.length)]
             }
         },
-        created(){
-            getphoneDone();
+        created() {
+            //判断是否已有用户登录后的信息，否则跳转回首页
+            if(this.userinfo.login){
+                //  请求账单信息
+                this.axios({
+                    url: URL.getVerifyCode,
+                    method: "get"
+                })
+                    .then(res => {
+
+                    })
+                    .catch(err => {
+
+                    });
+            }else{
+                this.$router.push({name: 'index'})
+            }
         },
         mounted() {
             let self = this;
             // current swiper instance
             // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
-            console.log('this is current swiper instance object', this.swiper);
+            // console.log('this is current swiper instance object', this.swiper);
         },
         methods: {
-            toImage(){
+            ...mapMutations([
+                'UPDATE_USERINFO'
+            ]),
+            toImage() {
 
                 this.$nextTick((x) => {   //正确写法
-                    html2canvas($('#img_content')[0],{
+                    html2canvas($('#img_content')[0], {
                         backgroundColor: null
-                    }).then((canvas)=> {
+                    }).then((canvas) => {
                         let dataURL = canvas.toDataURL("image/png");
                         this.dataURL = dataURL;
                         this.$refs.last_image.src = this.dataURL;
@@ -213,8 +236,8 @@
             },
             slideChangeTransitionEnd() {
                 //  监听页面切换，发出响应请求
-                console.log(this.swiper.activeIndex);
-                if(this.swiper.activeIndex == 8){
+                // console.log(this.swiper.activeIndex);
+                if (this.swiper.activeIndex == 8) {
                     this.toImage();
                 }
             },
@@ -232,7 +255,7 @@
                     newArr.push(arr[idx]);
                     arr.splice(idx, 1)
                 }
-                console.log(newArr);
+                // console.log(newArr);
                 return newArr
             }
         }
@@ -454,7 +477,7 @@
             }
         }
 
-        .last_page{
+        .last_page {
             position: absolute;
             top: 0;
             left: 0;

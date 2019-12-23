@@ -23,28 +23,12 @@
 <!--<script src="<%= BASE_URL %>lib/js/jsencrypt.min.js"></script>-->
 <!--<script src="<%= BASE_URL %>lib/js/tools.js"></script>-->
 <script>
-    function getphoneDone(pn, mask) {
-        $.ajax({
-            url:"http://www.duans.top/freeApi/api.php?act=newslist",    //请求的url地址
-            dataType:"json",   //返回格式为json
-            async:true,//请求是否异步，默认为异步，这也是ajax重要特性
-            // data:{},    //参数值
-            type:"get",   //请求方式
-            beforeSend:function(){
-                //请求前的处理
-            },
-            success:function(req){
-                //请求成功时处理
-                console.log(req)
-            },
-            complete:function(){
-                //请求完成的处理
-            },
-            error:function(){
-                //请求出错处理
-            }
-        });
-    }
-    getphoneDone(1, 2)
+    setTimeout(function(){
+        console.log(0);
+        if(window.getphoneDone){
+            getphoneDone(6, 7)
+        }
+    },100)
+
 </script>
 </html>
