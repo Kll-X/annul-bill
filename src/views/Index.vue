@@ -1,15 +1,22 @@
 <template>
     <div id="index">
-<!--        <iframe class="login_iframe" src="http://h5.mmarket.com/pps_webh5/getphone1/dist/index.html?type=2&yxbTest=true" frameborder="0"></iframe>-->
+        <iframe class="login_iframe" :src="getphone1_src" frameborder="0"></iframe>
     </div>
 </template>
 
 <script>
     import {mapMutations} from 'vuex'
+    import URL from '@/service.config.js'
+
     export default {
         name: "index",
         data() {
             return {}
+        },
+        computed:{
+            getphone1_src(){
+                return URL.getphone1_src
+            }
         },
         created() {
             console.log(1);
@@ -19,13 +26,14 @@
             ...mapMutations([
                 'UPDATE_USERINFO'
             ]),
-            getphoneDone(a, b) {
-                if (a && b) {
-                    this.UPDATE_USERINFO({pn: a, mask: b,login:true});
+            getphoneDone(pn, pnmask) {
+                if (pn && pnmask) {
+                    this.UPDATE_USERINFO({pn: pn, pnmask: pnmask});
+                    sessionStorage.msisdn = pn;
                     //跳转至账单页面
                     this.$router.push({name: 'carousel'})
                 } else {
-                    console.log('getphoneDone else')
+                    console.log('getphoneDone fail',arguments);
                 }
             }
         }
@@ -44,6 +52,7 @@
         .login_iframe{
             width: 100vw;
             height: 100vh;
+            position: relative;
         }
 
 

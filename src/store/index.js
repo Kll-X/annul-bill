@@ -6,10 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     userinfo:{
-      age11:112,
-      pn:3,
-      mask:4,
-      longi:false
+      pn:'',
+      pnmask:'138****7383'
     }
   },
   mutations: {

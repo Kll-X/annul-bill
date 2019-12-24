@@ -10,6 +10,12 @@
 </head>
 <!--<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>-->
 <script src="<%= BASE_URL %>lib/js/jq.js"></script>
+<script src="<%= BASE_URL %>lib/js/vconsole.js"  type="text/javascript"></script>
+<script>
+    if(location.search.search('test=true')>-1){
+        var vconsole = new  VConsole();
+    }
+</script>
 <body>
 <noscript>
     <strong>We're sorry but annual-bill doesn't work properly without JavaScript enabled. Please enable it to
@@ -22,13 +28,14 @@
 
 <!--<script src="<%= BASE_URL %>lib/js/jsencrypt.min.js"></script>-->
 <!--<script src="<%= BASE_URL %>lib/js/tools.js"></script>-->
+
 <script>
-    setTimeout(function(){
-        console.log(0);
-        if(window.getphoneDone){
-            getphoneDone(6, 7)
-        }
-    },100)
+    // setTimeout(function(){
+    //     console.log(0);
+    //     if(window.getphoneDone){
+    //         getphoneDone(6, 7)
+    //     }
+    // },100)
 
 </script>
 </html>

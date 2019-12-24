@@ -15,7 +15,7 @@
                     </span>
                     <span class="other_text n1">
                         您在
-                        <span class="bill_data1">X月X日</span>
+                        <span class="bill_data1" ref="bill_data1"></span>
                         第一次使用MM应用商场
                     </span>
                     <span class="year_2019 n2">
@@ -23,14 +23,14 @@
                     </span>
                     <span class="other_text n2">
                         您在MM下载的第一个应用
-                        <span class="bill_data2">XXXXXX</span>
+                        <span class="bill_data2" ref="bill_data2"></span>
                     </span>
                     <span class="year_2019 n3">
                         2019年
                     </span>
                     <span class="other_text n3">
                         我们一起走过了多少个日夜
-                        <span class="bill_data3">286</span>
+                        <span class="bill_data3" ref="bill_data3"></span>
                     </span>
                 </div>
             </swiper-slide>
@@ -42,21 +42,21 @@
                     </span>
                     <span class="other_text n4">
                         您一共访问了MM多少次
-                        <span class="bill_data4">XXXXXX</span>
+                        <span class="bill_data4" ref="bill_data4"></span>
                     </span>
                     <span class="year_2019 n5">
                         2019年
                     </span>
                     <span class="other_text n5">
                         您在下载了多少个应用
-                        <span class="bill_data5">XXXXXX</span>
+                        <span class="bill_data5" ref="bill_data5"></span>
                     </span>
                     <span class="year_2019 n6">
                         2019年
                     </span>
                     <span class="other_text n6_1">
                         在MM
-                        <span class="bill_data6_1">X月X日</span>
+                        <span class="bill_data6_1" ref="bill_data6_1"></span>
                         订购了
                     </span>
                     <span class="other_text n6_2">
@@ -64,7 +64,7 @@
                     </span>
                     <span class="other_text n6_3">
                         为您节省了
-                        <span class="bill_data6_2">XXXX</span>
+                        <span class="bill_data6_2" ref="bill_data6_2"></span>
                         流量
                     </span>
                     <span class="year_2019 n7">
@@ -72,7 +72,7 @@
                     </span>
                     <span class="other_text n7">
                         用MM下载应用节省了
-                        <span class="bill_data7">多少时间</span>
+                        <span class="bill_data7" ref="bill_data7"></span>
                     </span>
                 </div>
             </swiper-slide>
@@ -81,7 +81,7 @@
 
                 <wordcloud
                         class="my_canvas"
-                        :data="defaultWords"
+                        :data="keyword_arr"
                         nameKey="name"
                         valueKey="value"
                         :color="'Category10'"
@@ -119,7 +119,7 @@
                 <img alt="" class="last_page" ref="last_image">
             </swiper-slide>
         </swiper>
-        <img v-show="!last_page" :src="require('../../public/img/guide.gif')" alt="" class="guide">
+        <!--        <img v-show="!last_page" :src="require('../../public/img/guide.gif')" alt="" class="guide">-->
     </div>
 
 </template>
@@ -144,7 +144,18 @@
                 last_page: 0,
                 dataURL: '',
                 favor_item: '影音娱乐',
-                honor_title: '一代宗师',
+                level: [
+                    '贤识学者',
+                    '一代宗师',
+                    '游戏猎人',
+                    '元始天尊',
+                    '斗战胜佛',
+                    '传说斗神',
+                    '超凡大师',
+                    '江湖传说',
+                    '武林盟主',
+                    '傲世王者'
+                ],
                 pages: [
                     require('../../public/img/1.png'),
                     require('../../public/img/2.png'),
@@ -159,13 +170,7 @@
                 swiperOption: {
                     direction: 'vertical',
                 },
-                keyword_arr: [
-                    {name: '影音娱乐'}, {name: '拍摄美化'}, {name: '新闻阅读'}, {name: '金融理财'}, {name: '系统工具'},
-                    {name: '网络购物'}, {name: '生活助手'}, {name: '旅游出行'}, {name: '社交通讯'}, {name: '商务办公'}, {name: '教育教学'},
-                    {name: '运动健康'}, {name: '儿童应用'}, {name: '美化壁纸'}, {name: '儿童游戏'}, {name: '休闲益智'}, {name: '动作冒险'},
-                    {name: '经营养成'}, {name: '体育赛车'}, {name: '角色扮演'}, {name: '文字游戏'}, {name: '疯狂跑酷'}, {name: '其他游戏'},
-                    {name: '消除游戏'}, {name: '棋牌游戏'}, {name: '飞行射击'}, {name: '策略塔防'}, {name: '网络游戏'}, {name: '射击游戏'}
-                ],
+                keyword_arr: [],
 
             }
         },
@@ -173,11 +178,12 @@
             ...mapState([
                 'userinfo'
             ]),
+            honor_title() {
+                let pnmask = this.userinfo.pnmask;
+                return pnmask ? this.level[pnmask[pnmask.length - 1]] : this.level[0];
+            },
             swiper() {
                 return this.$refs.mySwiper.swiper
-            },
-            defaultWords() {
-                return this.getRandomArr(this.keyword_arr)
             },
             slogan() {
                 let slogans = [
@@ -196,21 +202,84 @@
             }
         },
         created() {
+            let self = this;
+            this.keyword_arr = this.getRandomArr([
+                "新闻资讯",
+                "生活助手",
+                "通话通信",
+                "娱乐八卦",
+                "输入法",
+                "旅游出行",
+                "金融理财",
+                "浏览器",
+                "系统工具",
+                "数字音乐",
+                "社区交友",
+                "美化壁纸",
+                "网络购物",
+                "影音工具",
+                "商务办公",
+                "交通导航",
+                "健康医疗",
+                "网络视频"
+            ]);
+            console.log(this.keyword_arr);
+
             //判断是否已有用户登录后的信息，否则跳转回首页
-            if (this.userinfo.login) {
+            if (sessionStorage.msisdn) {
                 //  请求账单信息
                 this.axios({
-                    url: URL.getVerifyCode,
-                    method: "get"
+                    url: URL.get_bill,
+                    method: "post",
+                    data: {
+                        msisdn: sessionStorage.msisdn
+                    }
                 })
                     .then(res => {
-
+                        if (res.result == 0) {
+                            //    请求账单信息成功
+                            this.$nextTick((x) => {   //正确写法
+                                this.$refs.bill_data1.innerHTML = res.data.firstVisitDate;
+                                this.$refs.bill_data2.innerHTML = res.data.firstDwnApp;
+                                this.$refs.bill_data3.innerHTML = res.data.activeDays;
+                                this.$refs.bill_data4.innerHTML = res.data.accessTimes;
+                                this.$refs.bill_data5.innerHTML = res.data.dwnAppCnt;
+                                //是否订购过5G应用下载服务
+                                this.isOrderFree = res.data.isOrderFree;
+                                this.$refs.bill_data6_1.innerHTML = res.data.orderFreeDate;
+                                this.$refs.bill_data6_2.innerHTML = res.data.economyFlow;
+                                this.$refs.bill_data7.innerHTML = parseInt(res.data.dwnCnt) * 5 + '分钟';
+                                this.keyword_arr = this.getRandomArr(res.data.dwnAppTags);
+                            })
+                        } else {
+                            this.$toast({
+                                duration: 2000, // 持续展示 toast
+                                forbidClick: true,
+                                message: res.msg ? res.msg : '获取账单信息失败，请稍后重试！',
+                                overlay: true
+                            });
+                        }
                     })
                     .catch(err => {
-
+                        this.$toast({
+                            duration: 2000, // 持续展示 toast
+                            forbidClick: true,
+                            message: err.msg ? err.msg : '获取账单信息失败，请稍后重试！',
+                            overlay: true
+                        });
                     });
             } else {
-                this.$router.push({name: 'index'})
+                function toIndex() {
+                    self.$router.replace({name: 'index'})//会把login页的这条浏览历史记录清除掉
+                }
+
+                this.$toast({
+                    duration: 2000, // 持续展示 toast
+                    forbidClick: true,
+                    message: '请先登录',
+                    overlay: true,
+                    onClose: toIndex
+                });
             }
         },
         mounted() {
@@ -253,17 +322,32 @@
             wordClickHandler(name, value, vm) {
                 console.log('wordClickHandler', name, value, vm);
             },
-            getRandomArr(arr) {
-                var newArr = [];
-                for (var i = 0; i < 10; i++) {
-                    var idx = parseInt(Math.random() * arr.length);
-                    arr[idx].value = i;
-                    newArr.push(arr[idx]);
-                    arr.splice(idx, 1)
+            //打乱数组顺序
+            getArrRandomly(arr) {
+                var len = arr.length;
+                for (var i = len - 1; i >= 0; i--) {
+                    var randomIndex = Math.floor(Math.random() * (i + 1));
+                    var itemIndex = arr[randomIndex];
+                    arr[randomIndex] = arr[i];
+                    arr[i] = itemIndex;
                 }
-                // console.log(newArr);
-                return newArr
+                return arr;
+            },
+
+            //截取打乱后的数组的前10（num）位
+            getRandomArr(arr = [], num = 10) {
+                const tmpArr = this.getArrRandomly(arr);
+                let list = [];
+                for (let i = 0; i < num; i++) {
+                    let temp_obj = {};
+                    temp_obj.name = tmpArr[i];
+                    temp_obj.value = i;
+                    list.push(temp_obj);
+                }
+                ;
+                return list;
             }
+
         }
     }
 </script>
@@ -450,7 +534,7 @@
             .honor_title_1 {
                 position: absolute;
                 top: 7rem;
-                left: 50%;
+                left: 52%;
                 -webkit-transform: translateX(-50%);
                 -moz-transform: translateX(-50%);
                 -ms-transform: translateX(-50%);

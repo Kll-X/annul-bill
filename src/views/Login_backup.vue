@@ -127,7 +127,7 @@
             get_bill(e) {
                 let self = this;
 
-                if (URL.test) {
+                if (URL.dev) {
                     if (this.$refs.get_bill.dataset.forbid == 'true') {
                         return;
                     }
