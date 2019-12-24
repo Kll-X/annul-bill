@@ -15,7 +15,7 @@
                     </span>
                     <span class="other_text n1">
                         您在
-                        <span class="bill_data1" ref="bill_data1"></span>
+                        <span class="bill_data1" ref="bill_data1">{{bill_info.firstVisitDate}}</span>
                         第一次使用MM应用商场
                     </span>
                     <span class="year_2019 n2">
@@ -23,14 +23,14 @@
                     </span>
                     <span class="other_text n2">
                         您在MM下载的第一个应用
-                        <span class="bill_data2" ref="bill_data2"></span>
+                        <span class="bill_data2" ref="bill_data2">{{bill_info.firstDwnApp}}</span>
                     </span>
                     <span class="year_2019 n3">
                         2019年
                     </span>
                     <span class="other_text n3">
                         我们一起走过了多少个日夜
-                        <span class="bill_data3" ref="bill_data3"></span>
+                        <span class="bill_data3" ref="bill_data3">{{bill_info.activeDays}}</span>
                     </span>
                 </div>
             </swiper-slide>
@@ -42,37 +42,41 @@
                     </span>
                     <span class="other_text n4">
                         您一共访问了MM多少次
-                        <span class="bill_data4" ref="bill_data4"></span>
+                        <span class="bill_data4" ref="bill_data4">{{bill_info.accessTimes}}</span>
                     </span>
                     <span class="year_2019 n5">
                         2019年
                     </span>
                     <span class="other_text n5">
                         您在下载了多少个应用
-                        <span class="bill_data5" ref="bill_data5"></span>
+                        <span class="bill_data5" ref="bill_data5">{{bill_info.dwnAppCnt}}</span>
                     </span>
-                    <span class="year_2019 n6">
+                    <span  v-if="bill_info.isOrderFree" class="year_2019 n6">
                         2019年
                     </span>
-                    <span class="other_text n6_1">
+                    <span  v-if="bill_info.isOrderFree" class="other_text n6_1">
                         在MM
-                        <span class="bill_data6_1" ref="bill_data6_1"></span>
+                        <span class="bill_data6_1" ref="bill_data6_1">{{bill_info.orderFreeDate}}</span>
                         订购了
                     </span>
-                    <span class="other_text n6_2">
+                    <span  v-if="bill_info.isOrderFree" class="other_text n6_2">
                         每月5GB应用下载服务
                     </span>
-                    <span class="other_text n6_3">
+                    <span  v-if="bill_info.isOrderFree" class="other_text n6_3">
                         为您节省了
-                        <span class="bill_data6_2" ref="bill_data6_2"></span>
+                        <span class="bill_data6_2" ref="bill_data6_2">{{bill_info.economyFlow}}</span>
                         流量
                     </span>
-                    <span class="year_2019 n7">
+                    <!--已订购没有下载量就显示这句-->
+                    <span v-if="bill_info.isOrderFree && !bill_info.dwnCnt" class="other_text n6_4">
+                        赶紧去MM应用商场下载应用吧
+                    </span>
+                    <span :class="{'noOrderFree':!bill_info.isOrderFree,'year_2019 n7':true,'download0':bill_info.isOrderFree && !bill_info.dwnCnt}">
                         2019年
                     </span>
-                    <span class="other_text n7">
+                    <span :class="{'noOrderFree':!bill_info.isOrderFree,'other_text n7':true,'download0':bill_info.isOrderFree && !bill_info.dwnCnt}">
                         用MM下载应用节省了
-                        <span class="bill_data7" ref="bill_data7"></span>
+                        <span class="bill_data7" ref="bill_data7">{{bill_info.dwnTime}}</span>
                     </span>
                 </div>
             </swiper-slide>
@@ -81,7 +85,7 @@
 
                 <wordcloud
                         class="my_canvas"
-                        :data="keyword_arr"
+                        :data="bill_info.dwnAppTags"
                         nameKey="name"
                         valueKey="value"
                         :color="'Category10'"
@@ -171,7 +175,39 @@
                     direction: 'vertical',
                 },
                 keyword_arr: [],
-
+                bill_info: {
+                    msisdn: '',
+                    firstVisitDate: '',
+                    firstDwnApp: '',
+                    activeDays: '',
+                    accessTimes: '',
+                    dwnAppCnt: '',
+                    isOrderFree: '',
+                    orderFreeDate: '',
+                    economyFlow: '',
+                    dwnCnt: '',//总下载流量
+                    dwnTime:'',
+                    dwnAppTags: this.getRandomArr([
+                        "新闻资讯",
+                        "生活助手",
+                        "通话通信",
+                        "娱乐八卦",
+                        "输入法",
+                        "旅游出行",
+                        "金融理财",
+                        "浏览器",
+                        "系统工具",
+                        "数字音乐",
+                        "社区交友",
+                        "美化壁纸",
+                        "网络购物",
+                        "影音工具",
+                        "商务办公",
+                        "交通导航",
+                        "健康医疗",
+                        "网络视频"
+                    ])
+                }
             }
         },
         computed: {
@@ -239,17 +275,32 @@
                         if (res.result == 0) {
                             //    请求账单信息成功
                             this.$nextTick((x) => {   //正确写法
-                                this.$refs.bill_data1.innerHTML = res.data.firstVisitDate;
-                                this.$refs.bill_data2.innerHTML = res.data.firstDwnApp;
-                                this.$refs.bill_data3.innerHTML = res.data.activeDays;
-                                this.$refs.bill_data4.innerHTML = res.data.accessTimes;
-                                this.$refs.bill_data5.innerHTML = res.data.dwnAppCnt;
-                                //是否订购过5G应用下载服务
-                                this.isOrderFree = res.data.isOrderFree;
-                                this.$refs.bill_data6_1.innerHTML = res.data.orderFreeDate;
-                                this.$refs.bill_data6_2.innerHTML = res.data.economyFlow;
-                                this.$refs.bill_data7.innerHTML = parseInt(res.data.dwnCnt) * 5 + '分钟';
-                                this.keyword_arr = this.getRandomArr(res.data.dwnAppTags);
+
+                                // this.$refs.bill_data1.innerHTML = res.data.firstVisitDate;
+                                // this.$refs.bill_data2.innerHTML = res.data.firstDwnApp;
+                                // this.$refs.bill_data3.innerHTML = res.data.activeDays;
+                                // this.$refs.bill_data4.innerHTML = res.data.accessTimes;
+                                // this.$refs.bill_data5.innerHTML = res.data.dwnAppCnt;
+                                // //是否订购过5G应用下载服务
+                                // this.isOrderFree = res.data.isOrderFree;
+                                // this.$refs.bill_data6_1.innerHTML = res.data.orderFreeDate;
+                                // this.$refs.bill_data6_2.innerHTML = res.data.economyFlow;
+                                // this.$refs.bill_data7.innerHTML = parseInt(res.data.dwnCnt) * 5 + '分钟';
+                                // this.keyword_arr = this.getRandomArr(res.data.dwnAppTags);
+
+
+                                this.bill_info.msisdn = res.data.msisdn,
+                                    this.bill_info.firstVisitDate = res.data.firstVisitDate,
+                                    this.bill_info.firstDwnApp = res.data.firstDwnApp,
+                                    this.bill_info.activeDays = res.data.activeDays,
+                                    this.bill_info.accessTimes = res.data.accessTimes,
+                                    this.bill_info.dwnAppCnt = res.data.dwnAppCnt,
+                                    this.bill_info.isOrderFree = res.data.isOrderFree,
+                                    this.bill_info.orderFreeDate = res.data.orderFreeDate,
+                                    this.bill_info.economyFlow = res.data.economyFlow,
+                                    this.bill_info.dwnTime = parseInt(res.data.dwnAppCnt) * 5 + '分钟',
+                                    this.bill_info.dwnAppTags = this.getRandomArr(res.data.dwnAppTags);
+
                             })
                         } else {
                             this.$toast({
@@ -415,6 +466,14 @@
                     top: 9.71rem
                 }
 
+                .year_2019.n7.noOrderFree {
+                    top: 6.06rem
+                }
+
+                .year_2019.n7.download0 {
+                    top: 10.02rem
+                }
+
                 .other_text {
                     color: white;
                     font-size: 0.38rem;
@@ -501,8 +560,21 @@
                     top: 8.28rem;
                 }
 
+                .other_text.n6_4 {
+                    top: 9.05rem;
+                    color: #fbf700;
+                }
+
                 .other_text.n7 {
                     top: 10.27rem;
+                }
+
+                .other_text.n7.noOrderFree {
+                    top: 6.65rem
+                }
+
+                .other_text.n7.download0 {
+                    top: 10.74rem
                 }
 
             }

@@ -6,20 +6,23 @@
     </div>
 </template>
 <script>
-    import {customAnalysis,pvAnalysis} from '../public/lib/js/analysis'
+    import {customAnalysis, pvAnalysis} from '../public/lib/js/analysis'
     import URL from '@/service.config.js'
 
     export default {
-        mounted(){
-
-            if(1){             //如果MM打开
-
-            }else if(2){       //如果必备打开
-
-            }else if(3){       //如果白牌打开
-
-            }else {       //如果其他客户端（端外）打开
-                customAnalysis(URL.activity_id, URL.other_key, "", URL.dev);
+        mounted() {
+            //添加预埋统计
+            pvAnalysis(URL.activity_id, "", URL.dev);
+            if (window.androidmm) {
+                if (window.androidmm.openMusic) {// MM客户端
+                    customAnalysis(URL.activity_id, URL.mm_key, "", URL.dev);
+                } else {//必备客户端
+                    customAnalysis(URL.activity_id, URL.bibei_key, "", URL.dev);
+                }
+            } else if (window.openApp) {//白牌机
+                customAnalysis(URL.activity_id, URL.baipai_key, "", URL.dev);
+            } else {//端外
+                customAnalysis(URL.activity_id, URL.other_key, "", URL.dev);
             }
         }
     }
