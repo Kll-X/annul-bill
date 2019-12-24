@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {
     userinfo:{
       pn:'',
-      pnmask:'138****7383'
+      pnmask:''
     }
   },
   mutations: {
