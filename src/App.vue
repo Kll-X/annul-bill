@@ -34,6 +34,6 @@
     }
 
     img {
-        /*pointer-events: none;*/  //使用这个样式后，影响到图片不能监听被点击或者长按
+        /*pointer-events: none;*/  //使用这个样式后，导致图片监听触碰会被屏蔽
     }
 </style>
