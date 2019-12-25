@@ -5,10 +5,10 @@
                 @someSwiperEvent="callback">
             <!-- slides -->
             <swiper-slide class="carousel">
-                <img class="page_bg" :src="pages[0]" alt="">
+                <img class="page_bg p0" :src="pages[0]" alt="">
             </swiper-slide>
             <swiper-slide class="carousel">
-                <img class="page_bg" :src="pages[1]" alt="">
+                <img class="page_bg p1" :src="pages[1]" alt="">
                 <div class="bill_info">
                     <span class="year_2019 n1">
                         2019年
@@ -35,7 +35,7 @@
                 </div>
             </swiper-slide>
             <swiper-slide class="carousel">
-                <img class="page_bg" :src="pages[2]" alt="">
+                <img class="page_bg p2" :src="pages[2]" alt="">
                 <div class="bill_info">
                     <span class="year_2019 n4">
                         2019年
@@ -81,7 +81,7 @@
                 </div>
             </swiper-slide>
             <swiper-slide class="carousel">
-                <img class="page_bg" :src="pages[3]" alt="">
+                <img class="page_bg p3" :src="pages[3]" alt="">
 
                 <wordcloud
                         class="my_canvas"
@@ -102,25 +102,25 @@
 
             </swiper-slide>
             <swiper-slide class="carousel">
-                <img class="page_bg" :src="pages[4]" alt="">
+                <img class="page_bg p4" :src="pages[4]" alt="">
                 <span class="honor_title_1">{{honor_title}}</span>
             </swiper-slide>
             <swiper-slide class="carousel">
-                <img class="page_bg" :src="pages[5]" alt="">
+                <img class="page_bg p5" :src="pages[5]" alt="">
             </swiper-slide>
             <swiper-slide class="carousel">
-                <img class="page_bg" :src="pages[6]" alt="">
+                <img class="page_bg p6" :src="pages[6]" alt="">
             </swiper-slide>
             <swiper-slide class="carousel">
-                <img class="page_bg" :src="pages[7]" alt="">
+                <img class="page_bg p7" :src="pages[7]" alt="">
             </swiper-slide>
             <swiper-slide class="carousel">
                 <div id="img_content" ref="img_content">
-                    <img class="page_bg" :src="pages[8]" alt="">
+                    <img class="page_bg p8" :src="pages[8]" alt="">
                     <span class="honor_title_2">{{honor_title}}</span>
                     <span class="slogan">{{slogan}}</span>
                 </div>
-                <img alt="" class="last_page" ref="last_image">
+                <img alt="" class="screenshot" ref="screenshot">
             </swiper-slide>
         </swiper>
         <!--        <img v-show="!last_page" :src="require('../../public/img/guide.gif')" alt="" class="guide">-->
@@ -351,7 +351,7 @@
                     }).then((canvas) => {
                         let dataURL = canvas.toDataURL("image/png");
                         this.dataURL = dataURL;
-                        this.$refs.last_image.src = this.dataURL;
+                        this.$refs.screenshot.src = this.dataURL;
                         console.log('转图完成');
                     });
                 })
@@ -419,9 +419,10 @@
             .page_bg {
                 display: block;
                 width: 100vw;
-
             }
-
+            .page_bg.p0 {
+                pointer-events: auto;
+            }
             .bill_info {
                 position: absolute;
                 left: 50%;
@@ -639,7 +640,7 @@
             }
         }
 
-        .last_page {
+        .screenshot {
             position: absolute;
             top: 0;
             left: 0;
@@ -649,7 +650,8 @@
             width: 100vw;
             height: 100vh;
             opacity: 0;
-            z-index: 1
+            z-index: 1;
+            pointer-events: auto;
         }
 
     }
