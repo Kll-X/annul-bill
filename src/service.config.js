@@ -9,6 +9,7 @@ if (
     window.location.host.search("47.107") > -1
 ) {
     pre_url = "http://47.107.125.18/mssp_pps/";
+    // pre_url2 = "http://47.107.125.18/pps_web/";
     pre_url2 = "http://47.107.125.18/pps_web/";
     dev = 1;
     activity_id:'191224004'
@@ -35,7 +36,7 @@ const URL = {
     other_key:'0800ada2b3e445c58447347aadff4c0b',
     backup_key:'c24176d98169465ab35d8c1a946b0aca',
     get_bill: pre_url + "activityCommon/yearBill.do",
-    getphone1_src: pre_url2 + "getphone1/dist/index.html?type=3"
+    getphone1_src: pre_url2 + "getphone1/dist/index.html?pid=2001&type=3"
 };
 
 export default URL;

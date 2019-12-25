@@ -26,10 +26,10 @@
             ...mapMutations([
                 'UPDATE_USERINFO'
             ]),
-            getphoneDone(pn, pnmask) {
-                if (pn && pnmask) {
-                    this.UPDATE_USERINFO({pn: pn, pnmask: pnmask});
-                    sessionStorage.msisdn = pn;
+            getphoneDone(obj) {
+                if (obj.pn && obj.pnmask) {
+                    this.UPDATE_USERINFO({pn: obj.pn, pnmask: obj.pnmask});
+                    sessionStorage.msisdn = obj.pn;
                     //跳转至账单页面
                     this.$router.push({name: 'carousel'})
                 } else {

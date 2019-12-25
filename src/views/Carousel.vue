@@ -147,7 +147,7 @@
             return {
                 last_page: 0,
                 dataURL: '',
-                favor_item: '影音娱乐',
+                favor_item: '',
                 level: [
                     '贤识学者',
                     '一代宗师',
