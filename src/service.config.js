@@ -5,6 +5,7 @@ let activity_id = '191224004';//生产环境活动id
 if (
     window.location.host.search("120.197") > -1 ||
     window.location.host.search("yxb.com") > -1 ||
+    window.location.host.search("localhost") > -1 ||
     window.location.host.search("8080") > -1 ||
     window.location.host.search("47.107") > -1
 ) {

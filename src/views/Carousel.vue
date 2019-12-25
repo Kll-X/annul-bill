@@ -51,18 +51,18 @@
                         您在下载了多少个应用
                         <span class="bill_data5" ref="bill_data5">{{bill_info.dwnAppCnt}}</span>
                     </span>
-                    <span  v-if="bill_info.isOrderFree" class="year_2019 n6">
+                    <span v-if="bill_info.isOrderFree" class="year_2019 n6">
                         2019年
                     </span>
-                    <span  v-if="bill_info.isOrderFree" class="other_text n6_1">
+                    <span v-if="bill_info.isOrderFree" class="other_text n6_1">
                         在MM
                         <span class="bill_data6_1" ref="bill_data6_1">{{bill_info.orderFreeDate}}</span>
                         订购了
                     </span>
-                    <span  v-if="bill_info.isOrderFree" class="other_text n6_2">
+                    <span v-if="bill_info.isOrderFree" class="other_text n6_2">
                         每月5GB应用下载服务
                     </span>
-                    <span  v-if="bill_info.isOrderFree" class="other_text n6_3">
+                    <span v-if="bill_info.isOrderFree" class="other_text n6_3">
                         为您节省了
                         <span class="bill_data6_2" ref="bill_data6_2">{{bill_info.economyFlow}}</span>
                         流量
@@ -98,7 +98,7 @@
                         :wordClick="wordClickHandler">
                 </wordcloud>
 
-                <span class="favor_item">{{favor_item}}</span>
+                <span class="bestLikeApp">{{bill_info.bestLikeApp}}</span>
 
             </swiper-slide>
             <swiper-slide class="carousel">
@@ -147,7 +147,6 @@
             return {
                 last_page: 0,
                 dataURL: '',
-                favor_item: '',
                 level: [
                     '贤识学者',
                     '一代宗师',
@@ -186,27 +185,28 @@
                     orderFreeDate: '',
                     economyFlow: '',
                     dwnCnt: '',//总下载流量
-                    dwnTime:'',
+                    dwnTime: '',
                     dwnAppTags: this.getRandomArr([
-                        "新闻资讯",
-                        "生活助手",
-                        "通话通信",
-                        "娱乐八卦",
-                        "输入法",
-                        "旅游出行",
-                        "金融理财",
-                        "浏览器",
-                        "系统工具",
-                        "数字音乐",
-                        "社区交友",
-                        "美化壁纸",
-                        "网络购物",
-                        "影音工具",
-                        "商务办公",
-                        "交通导航",
-                        "健康医疗",
-                        "网络视频"
-                    ])
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                    ]),
+                    bestLikeApp: ''
                 }
             }
         },
@@ -289,18 +289,18 @@
                                 // this.keyword_arr = this.getRandomArr(res.data.dwnAppTags);
 
 
-                                this.bill_info.msisdn = res.data.msisdn,
-                                    this.bill_info.firstVisitDate = res.data.firstVisitDate,
-                                    this.bill_info.firstDwnApp = res.data.firstDwnApp,
-                                    this.bill_info.activeDays = res.data.activeDays,
-                                    this.bill_info.accessTimes = res.data.accessTimes,
-                                    this.bill_info.dwnAppCnt = res.data.dwnAppCnt,
-                                    this.bill_info.isOrderFree = res.data.isOrderFree,
-                                    this.bill_info.orderFreeDate = res.data.orderFreeDate,
-                                    this.bill_info.economyFlow = res.data.economyFlow,
-                                    this.bill_info.dwnTime = parseInt(res.data.dwnAppCnt) * 5 + '分钟',
-                                    this.bill_info.dwnAppTags = this.getRandomArr(res.data.dwnAppTags);
-
+                                this.bill_info.msisdn = res.data.msisdn;
+                                this.bill_info.firstVisitDate = res.data.firstVisitDate;
+                                this.bill_info.firstDwnApp = res.data.firstDwnApp;
+                                this.bill_info.activeDays = res.data.activeDays;
+                                this.bill_info.accessTimes = res.data.accessTimes;
+                                this.bill_info.dwnAppCnt = res.data.dwnAppCnt;
+                                this.bill_info.isOrderFree = res.data.isOrderFree;
+                                this.bill_info.orderFreeDate = res.data.orderFreeDate;
+                                this.bill_info.economyFlow = res.data.economyFlow;
+                                this.bill_info.dwnTime = parseInt(res.data.dwnAppCnt) * 5 + '分钟';
+                                this.bill_info.dwnAppTags = this.getRandomArr(res.data.dwnAppTags);
+                                this.bill_info.bestLikeApp = res.data.bestLikeApp
                             })
                         } else {
                             this.$toast({
@@ -589,7 +589,7 @@
                 background: #ffffff;
             }
 
-            .favor_item {
+            .bestLikeApp {
                 position: absolute;
                 top: 16.71rem;
                 left: 50%;
