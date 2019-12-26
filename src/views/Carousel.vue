@@ -171,7 +171,7 @@
                     require('../../public/img/9.png')
                 ],
                 swiperOption: {
-                    direction: 'vertical',
+                    direction: 'vertical'
                 },
                 keyword_arr: [],
                 bill_info: {
@@ -271,47 +271,38 @@
                         msisdn: sessionStorage.msisdn
                     }
                 })
-                    .then(res => {
-                        if (res.result == 0) {
+                    .then((res) => {
+                        // console.log('res=>',res);
+                        if (res.data.resultCode == 0) {
                             //    请求账单信息成功
                             this.$nextTick((x) => {   //正确写法
-
-                                // this.$refs.bill_data1.innerHTML = res.data.firstVisitDate;
-                                // this.$refs.bill_data2.innerHTML = res.data.firstDwnApp;
-                                // this.$refs.bill_data3.innerHTML = res.data.activeDays;
-                                // this.$refs.bill_data4.innerHTML = res.data.accessTimes;
-                                // this.$refs.bill_data5.innerHTML = res.data.dwnAppCnt;
-                                // //是否订购过5G应用下载服务
-                                // this.isOrderFree = res.data.isOrderFree;
-                                // this.$refs.bill_data6_1.innerHTML = res.data.orderFreeDate;
-                                // this.$refs.bill_data6_2.innerHTML = res.data.economyFlow;
-                                // this.$refs.bill_data7.innerHTML = parseInt(res.data.dwnCnt) * 5 + '分钟';
-                                // this.keyword_arr = this.getRandomArr(res.data.dwnAppTags);
-
-
-                                this.bill_info.msisdn = res.data.msisdn;
-                                this.bill_info.firstVisitDate = res.data.firstVisitDate;
-                                this.bill_info.firstDwnApp = res.data.firstDwnApp;
-                                this.bill_info.activeDays = res.data.activeDays;
-                                this.bill_info.accessTimes = res.data.accessTimes;
-                                this.bill_info.dwnAppCnt = res.data.dwnAppCnt;
-                                this.bill_info.isOrderFree = res.data.isOrderFree;
-                                this.bill_info.orderFreeDate = res.data.orderFreeDate;
-                                this.bill_info.economyFlow = res.data.economyFlow;
-                                this.bill_info.dwnTime = parseInt(res.data.dwnAppCnt) * 5 + '分钟';
-                                this.bill_info.dwnAppTags = this.getRandomArr(res.data.dwnAppTags);
-                                this.bill_info.bestLikeApp = res.data.bestLikeApp
+                                this.bill_info.msisdn = res.data.data.msisdn;
+                                this.bill_info.firstVisitDate = res.data.data.firstVisitDate;
+                                this.bill_info.firstDwnApp = res.data.data.firstDwnApp;
+                                this.bill_info.activeDays = res.data.data.activeDays;
+                                this.bill_info.accessTimes = res.data.data.accessTimes;
+                                this.bill_info.dwnAppCnt = res.data.data.dwnAppCnt;
+                                this.bill_info.isOrderFree = res.data.data.isOrderFree;
+                                this.bill_info.orderFreeDate = res.data.data.orderFreeDate;
+                                this.bill_info.economyFlow = res.data.data.economyFlow;
+                                this.bill_info.dwnTime = parseInt(res.data.data.dwnAppCnt) * 5 + '分钟';
+                                this.bill_info.dwnAppTags = this.getRandomArr(res.data.data.dwnAppTags);
+                                this.bill_info.bestLikeApp = res.data.data.bestLikeApp
                             })
                         } else {
+                            //请求有数据误，首页禁止滑动
+                            $('.p0').parent().addClass("swiper-no-swiping");
                             this.$toast({
                                 duration: 2000, // 持续展示 toast
                                 forbidClick: true,
-                                message: res.msg ? res.msg : '获取账单信息失败，请稍后重试！',
+                                message: res.data.msg ? res.data.msg : '获取账单信息失败，请稍后重试！',
                                 overlay: true
                             });
                         }
                     })
                     .catch(err => {
+                        //请求数据有误，首页禁止滑动
+                        $('.p0').parent().addClass("swiper-no-swiping");
                         this.$toast({
                             duration: 2000, // 持续展示 toast
                             forbidClick: true,
@@ -420,9 +411,11 @@
                 display: block;
                 width: 100vw;
             }
+
             .page_bg.p0 {
                 pointer-events: auto;
             }
+
             .bill_info {
                 position: absolute;
                 left: 50%;

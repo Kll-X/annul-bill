@@ -1,6 +1,6 @@
 <template>
     <div id="index">
-<!--        <iframe class="login_iframe" :src="getphone1_src" frameborder="0"></iframe>-->
+        <iframe class="login_iframe" :src="getphone1_src" frameborder="0"></iframe>
     </div>
 </template>
 
