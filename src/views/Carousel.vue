@@ -123,7 +123,7 @@
                 <img alt="" class="screenshot" ref="screenshot">
             </swiper-slide>
         </swiper>
-        <!--        <img v-show="!last_page" :src="require('../../public/img/guide.gif')" alt="" class="guide">-->
+                <img v-show="normal && !last_page" :src="require('../../public/img/guide.png')" alt="" class="guide">
     </div>
 
 </template>
@@ -145,6 +145,7 @@
         },
         data() {
             return {
+                normal:false,
                 last_page: 0,
                 dataURL: '',
                 level: [
@@ -274,6 +275,7 @@
                     .then((res) => {
                         // console.log('res=>',res);
                         if (res.data.resultCode == 0) {
+                            this.normal = true;
                             //    请求账单信息成功
                             this.$nextTick((x) => {   //正确写法
                                 this.bill_info.msisdn = res.data.data.msisdn;
@@ -290,6 +292,7 @@
                                 this.bill_info.bestLikeApp = res.data.data.bestLikeApp
                             })
                         } else {
+                            this.normal = false;
                             //请求数据有误，首页禁止滑动
                             this.$nextTick((x) => {
                                 $('.p0').parent().addClass("swiper-no-swiping");
@@ -303,6 +306,7 @@
                         }
                     })
                     .catch(err => {
+                        this.normal = false;
                         //请求数据有误，首页禁止滑动
                         this.$nextTick((x) => {
                             $('.p0').parent().addClass("swiper-no-swiping");
