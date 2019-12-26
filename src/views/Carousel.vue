@@ -290,8 +290,10 @@
                                 this.bill_info.bestLikeApp = res.data.data.bestLikeApp
                             })
                         } else {
-                            //请求有数据误，首页禁止滑动
-                            $('.p0').parent().addClass("swiper-no-swiping");
+                            //请求数据有误，首页禁止滑动
+                            this.$nextTick((x) => {
+                                $('.p0').parent().addClass("swiper-no-swiping");
+                            });
                             this.$toast({
                                 duration: 2000, // 持续展示 toast
                                 forbidClick: true,
@@ -302,7 +304,9 @@
                     })
                     .catch(err => {
                         //请求数据有误，首页禁止滑动
-                        $('.p0').parent().addClass("swiper-no-swiping");
+                        this.$nextTick((x) => {
+                            $('.p0').parent().addClass("swiper-no-swiping");
+                        });
                         this.$toast({
                             duration: 2000, // 持续展示 toast
                             forbidClick: true,
