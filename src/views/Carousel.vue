@@ -6,6 +6,9 @@
             <!-- slides -->
             <swiper-slide class="carousel">
                 <img class="page_bg p0" :src="pages[0]" alt="">
+                <div class="wrapper-btn-download" >
+                    <img class="btn-download" @click="download()" style="pointer-events: auto" :src="require('../../public/img/btn_download.png')"></img>
+                </div>
             </swiper-slide>
             <swiper-slide class="carousel">
                 <img class="page_bg p1" :src="pages[1]" alt="">
@@ -29,8 +32,7 @@
                         2019年
                     </span>
                     <span class="other_text n3">
-                        我们一起走过了多少个日夜
-                        <span class="bill_data3" ref="bill_data3">{{bill_info.activeDays}}</span>
+                        我们一起走过了<span class="bill_data3" ref="bill_data3">{{bill_info.activeDays}}</span>个日夜
                     </span>
                 </div>
             </swiper-slide>
@@ -41,15 +43,13 @@
                         2019年
                     </span>
                     <span class="other_text n4">
-                        您一共访问了MM多少次
-                        <span class="bill_data4" ref="bill_data4">{{bill_info.accessTimes}}</span>
+                        您一共访问了MM<span class="bill_data4" ref="bill_data4">{{bill_info.accessTimes}}</span>次
                     </span>
                     <span class="year_2019 n5">
                         2019年
                     </span>
                     <span class="other_text n5">
-                        您在下载了多少个应用
-                        <span class="bill_data5" ref="bill_data5">{{bill_info.dwnAppCnt}}</span>
+                        您在MM下载了<span class="bill_data5" ref="bill_data5">{{bill_info.dwnAppCnt}}</span>个应用
                     </span>
                     <span v-if="bill_info.isOrderFree" class="year_2019 n6">
                         2019年
@@ -71,6 +71,9 @@
                     <span v-if="bill_info.isOrderFree && !bill_info.dwnCnt" class="other_text n6_4">
                         赶紧去MM应用商场下载应用吧
                     </span>
+                    <span v-if="!bill_info.isOrderFree && bill_info.dwnCnt && beforeTime(2020,1,1)" class="other_text n6_5">
+                        您将华丽丽的错过了30GB流量<br/><a href="http://odp.fr18.mmarket.com/s.do?requestid=newFree_index_v1&channelId=5210543599" class="btn-click-me">【点我】</a>不要错过TA!
+                    </span>
                     <span :class="{'noOrderFree':!bill_info.isOrderFree,'year_2019 n7':true,'download0':bill_info.isOrderFree && !bill_info.dwnCnt}">
                         2019年
                     </span>
@@ -83,20 +86,21 @@
             <swiper-slide class="carousel">
                 <img class="page_bg p3" :src="pages[3]" alt="">
 
-                <wordcloud
-                        class="my_canvas"
-                        :data="bill_info.dwnAppTags"
-                        nameKey="name"
-                        valueKey="value"
-                        :color="'Category10'"
-                        :showTooltip="false"
-                        :spiral="'rectangular'"
-                        :fontScale="'n'"
-                        :wordPadding="0.01"
-                        :fontSize="[10, 18]"
-                        :rotate="{from: -60, to: 60, numOfOrientation: 10 }"
-                        :wordClick="wordClickHandler">
-                </wordcloud>
+<!--                <wordcloud-->
+<!--                        class="my_canvas"-->
+<!--                        :data="bill_info.dwnAppTags"-->
+<!--                        nameKey="name"-->
+<!--                        valueKey="value"-->
+<!--                        :color="'Category10'"-->
+<!--                        :showTooltip="false"-->
+<!--                        :spiral="'rectangular'"-->
+<!--                        :fontScale="'n'"-->
+<!--                        :wordPadding="0.01"-->
+<!--                        :fontSize="[15, 24]"-->
+<!--                        :rotate="{from: -60, to: 60, numOfOrientation: 10 }"-->
+<!--                        :wordClick="wordClickHandler">-->
+<!--                </wordcloud>-->
+                <WordCloud class="word-cloud" :list="bill_info.wordCloudList"></WordCloud>
 
                 <span class="bestLikeApp">{{bill_info.bestLikeApp}}</span>
 
@@ -123,7 +127,7 @@
                 <img alt="" class="screenshot" ref="screenshot">
             </swiper-slide>
         </swiper>
-                <img v-show="normal && !last_page" :src="require('../../public/img/guide.png')" alt="" class="guide">
+                <img v-show="normal && !swiper.isEnd" :src="require('../../public/img/guide.png')" alt="" class="guide">
     </div>
 
 </template>
@@ -131,7 +135,8 @@
 <script>
     import 'swiper/dist/css/swiper.css'
     import {swiper, swiperSlide} from 'vue-awesome-swiper'
-    import wordcloud from 'vue-wordcloud'
+    // import wordcloud from 'vue-wordcloud'
+    import WordCloud from '@/components/WordCloud'
     import html2canvas from 'html2canvas';
     import URL from '@/service.config.js'
     import {mapState, mapMutations} from 'vuex'
@@ -141,12 +146,12 @@
         components: {
             swiper,
             swiperSlide,
-            wordcloud
+            // wordcloud,
+            WordCloud
         },
         data() {
             return {
                 normal:false,
-                last_page: 0,
                 dataURL: '',
                 level: [
                     '贤识学者',
@@ -172,7 +177,8 @@
                     require('../../public/img/9.png')
                 ],
                 swiperOption: {
-                    direction: 'vertical'
+                    direction: 'vertical',
+                    // initialSlide: 4
                 },
                 keyword_arr: [],
                 bill_info: {
@@ -207,6 +213,7 @@
                         "",
                         ""
                     ]),
+                    wordCloudList: [],
                     bestLikeApp: ''
                 }
             }
@@ -239,7 +246,7 @@
             }
         },
         created() {
-            let self = this;
+          let self = this;
             // this.keyword_arr = this.getRandomArr([
             //     "新闻资讯",
             //     "生活助手",
@@ -262,14 +269,15 @@
             // ]);
             // console.log(this.keyword_arr);
 
+
             //判断是否已有用户登录后的信息，否则跳转回首页
-            if (sessionStorage.msisdn) {
+                if (localStorage.msisdn) {
                 //  请求账单信息
                 this.axios({
                     url: URL.get_bill,
                     method: "post",
                     data: {
-                        msisdn: sessionStorage.msisdn
+                        msisdn: localStorage.msisdn
                     }
                 })
                     .then((res) => {
@@ -278,18 +286,17 @@
                             this.normal = true;
                             //    请求账单信息成功
                             this.$nextTick((x) => {   //正确写法
-                                this.bill_info.msisdn = res.data.data.msisdn;
-                                this.bill_info.firstVisitDate = res.data.data.firstVisitDate;
-                                this.bill_info.firstDwnApp = res.data.data.firstDwnApp;
-                                this.bill_info.activeDays = res.data.data.activeDays;
-                                this.bill_info.accessTimes = res.data.data.accessTimes;
-                                this.bill_info.dwnAppCnt = res.data.data.dwnAppCnt;
-                                this.bill_info.isOrderFree = res.data.data.isOrderFree;
-                                this.bill_info.orderFreeDate = res.data.data.orderFreeDate;
-                                this.bill_info.economyFlow = res.data.data.economyFlow;
-                                this.bill_info.dwnTime = parseInt(res.data.data.dwnAppCnt) * 5 + '分钟';
-                                this.bill_info.dwnAppTags = this.getRandomArr(res.data.data.dwnAppTags);
-                                this.bill_info.bestLikeApp = res.data.data.bestLikeApp
+                                this.swiper.removeSlide(0)  //去掉下载提示页
+
+                                res.data.data.dwnTime = parseInt(res.data.data.dwnAppCnt) * 5 + '分钟';
+                                res.data.data.wordCloudList = this.getRandomArr(res.data.data.dwnAppTags);
+                                Object.assign(this.bill_info,res.data.data);
+                            })
+                        } else if (res.data.resultCode == -5001) {
+                            // 查无记录
+                            this.normal = false;
+                            this.$nextTick( () => {
+                                this.swiper.destroy()
                             })
                         } else {
                             this.normal = false;
@@ -357,17 +364,13 @@
             },
             slideChangeTransitionEnd() {
                 //  监听页面切换，发出响应请求
-                // console.log(this.swiper.activeIndex);
-                if (this.swiper.activeIndex == 8) {
+                // console.log(this.swiper.isEnd);
+                if (this.swiper.isEnd) {
                     this.toImage();
-                    this.last_page = 1
-                } else {
-                    this.last_page = 0
                 }
-                // console.log(this.last_page)
             },
             callback() {
-                console.log(1)
+                // console.log(1)
             },
             wordClickHandler(name, value, vm) {
                 console.log('wordClickHandler', name, value, vm);
@@ -396,6 +399,18 @@
                 }
                 ;
                 return list;
+            },
+
+            beforeTime(year, month, date) {
+                if (month < 1) {
+                    month = 1;
+                }
+                let time = new Date(year, month-1, date);
+                console.log( new Date()<= time)
+                return new Date()<= time;
+            },
+            download() {
+                window.location.href = 'http://cmapp.mmarket.com/~apk/rs/res1/mmclient/MM_online_channel_5210543600.apk?type=activity20191224&phone=';
             }
 
         }
@@ -422,6 +437,18 @@
 
             .page_bg.p0 {
                 pointer-events: auto;
+            }
+
+            .wrapper-btn-download{
+                position: absolute;
+                bottom: 2.6rem;
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                .btn-download{
+                    width: 4rem;
+                    height: 1.1rem;
+                }
             }
 
             .bill_info {
@@ -567,6 +594,16 @@
                     color: #fbf700;
                 }
 
+                .other_text.n6_5 {
+                    top: 9.05rem;
+                    color: white;
+                    .btn-click-me{
+                        color: #fbf700;
+                        font-size: 1.5em;
+                        border-bottom: 1px solid #fbf700;
+                    }
+                }
+
                 .other_text.n7 {
                     top: 10.27rem;
                 }
@@ -584,11 +621,18 @@
             .my_canvas {
                 position: absolute;
                 top: 5.3rem;
-                width: 7.2rem;
-                height: 5rem;
+                width: 9.2rem;
+                height: 6rem;
                 left: 50%;
                 transform: translateX(-50%);
-                background: #ffffff;
+            }
+
+            .word-cloud {
+                position: absolute;
+                top: 6.3rem;
+                width: 9.2rem;
+                height: 4.5rem;
+                left: 1rem;
             }
 
             .bestLikeApp {
@@ -600,9 +644,9 @@
                 -ms-transform: translateX(-50%);
                 -o-transform: translateX(-50%);
                 transform: translateX(-50%);
-                font-size: 0.32rem;
+                font-size: 0.8rem;
                 font-weight: bold;
-                color: #fcfdfe;
+                color: #fbf800;
             }
 
             .honor_title_1 {

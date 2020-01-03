@@ -10,6 +10,21 @@
     import URL from '@/service.config.js'
 
     export default {
+        created() {
+            if (!is_ios()){
+                location.href = "mm://launchbrowser?url=http%3A%2F%2Fodp.mmarket.com%3FdispatchUrl="+ encodeURIComponent('http://h5.mmarket.com/pps_webh5/annual-bill/dist/')
+            }
+            function is_ios() {
+                var u = navigator.userAgent;
+                // var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+                var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+                if (isiOS) {
+                  return true;
+                } else {
+                  return false;
+                }
+            }
+        },
         mounted() {
             //添加预埋统计
             pvAnalysis(URL.activity_id, "", URL.dev);
